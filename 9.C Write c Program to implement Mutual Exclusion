@@ -1,0 +1,32 @@
+#include <stdio.h>
+#include <time.h>
+int main() {
+    int cs = 0, pro = 0;
+    double run = 2.0;
+    char key = 'a';
+    time_t t1 = time(NULL) - 5, t2;
+    printf("Press any key (except q) to enter a process:\n");
+    printf("Press q at any time to exit\n");
+    while (key != 'q') {
+        key = getchar();  // waits for key press
+        if (key == '\n') continue;  // ignore Enter key
+        if (key != 'q') {
+            if (cs == 1) {
+                t2 = time(NULL);
+                if (difftime(t2, t1) > run) {
+                    printf("Process %d exited critical section.\n", pro - 1);
+                    cs = 0;
+                }
+            }
+            if (cs == 0) {
+                printf("Process %d entered critical section.\n", pro);
+                cs = 1;
+                pro++;
+                t1 = time(NULL);
+            } else {
+                printf("Error: Another process is currently executing!\n");
+            }
+        }
+    }
+    return 0;
+}
